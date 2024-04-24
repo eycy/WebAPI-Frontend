@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Modal, Checkbox, Space, Typography } from 'antd';
 
+import { DownOutlined, SmileOutlined } from '@ant-design/icons';
+import type { MenuProps } from 'antd';
+import { Dropdown } from 'antd';
+
 import { articleAPI } from "../commons/http-commons";
 
 interface loginFields {
@@ -11,9 +15,8 @@ interface loginFields {
 
 const { Text } = Typography;
 
-const LoginForm = ({ setCredentials }) => {
+const LoginForm = ({ setCredentials, setIsLoggedIn, isLoggedIn }) => {
   const [isShow, setIsShow] = React.useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [getUser, setUser] = useState(null);
   const [loginError, setLoginError] = useState(false);
 
@@ -55,11 +58,38 @@ const LoginForm = ({ setCredentials }) => {
   };
 
 
+  const items: MenuProps['items'] = [
+    {
+      key: '1',
+      label: (
+        <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
+          Add New Listing
+        </a>
+      ),
+    },
+    {
+      key: '2',
+      label: (
+        <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
+          Logout
+        </a>
+      )
+    }
+  ];
 
   return (
     <>
       {isLoggedIn ? (
-        <div>Hello, {getUser.username}</div>
+        <div>
+          <Dropdown menu={{ items }}>
+            <a onClick={(e) => e.preventDefault()}>
+              <Space>
+                Hello, {getUser.username}
+                <DownOutlined />
+              </Space>
+            </a>
+          </Dropdown>
+        </div>
       ) : (
         <>
           <Button icon={<UserOutlined />} onClick={() => { setIsShow(true) }} />
@@ -71,7 +101,7 @@ const LoginForm = ({ setCredentials }) => {
               </Form.Item>
               <Form.Item label="Password" name="password"
                 rules={[{ required: true, message: 'Missing password' }]}>
-                <Input.Password />  
+                <Input.Password />
               </Form.Item>
               {loginError && (
                 <Text type="danger">Incorrect username or password</Text>

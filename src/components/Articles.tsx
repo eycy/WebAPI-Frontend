@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex } from "antd";
+import { Flex, Button } from "antd";
 import Article from "./Article";
 // import articles from "./articles.json";
 // import { Link } from "react-router-dom";
@@ -8,7 +8,7 @@ import { filmAPI } from "../commons/http-commons";
 import { articleAPI } from "../commons/http-commons";
 import axios from "axios";
 
-const Articles = ({ credentials }) => {
+const Articles = ({ credentials, isLoggedIn }) => {
   const [articles, setArticles] = React.useState(null);
 
   React.useEffect(() => {
@@ -29,16 +29,16 @@ const Articles = ({ credentials }) => {
 
     return (
       <>
+        {isLoggedIn ? (
+        <Button type="primary">Add New Posting</Button>
+        ) : <div></div>}
+        
         <Flex justify="space-evenly" wrap="wrap" gap="middle">
           {
             articles &&
-            // articles.map(({ _id, title, director }) => (
-            //   <>
-            //     <Article title={title} key={_id} href={_id}>{director}</Article>
-            //   </>
             articles.map(({ id, title, description }) => (
               <>
-                <Article title={title} key={id} href={id}>{description}</Article>
+                <Article isLoggedIn={isLoggedIn} title={title} key={id} href={id}>{description}</Article>
               </>
             ))
           }
