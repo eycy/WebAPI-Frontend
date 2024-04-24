@@ -22,7 +22,13 @@ const { Text } = Typography;
 
 
 const App = () => {
-  const [isShow, setIsShow] = useState(false);
+  // const [isShow, setIsShow] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [user, setUser] = useState(null);
+
+  const [credentials, setCredentials] = useState("");
+
+
   return (
     <Router>
       <Layout >
@@ -30,25 +36,18 @@ const App = () => {
           <Space>
             <Link to='/'>Home</Link>
             <Link to='/dashboard'>Dashboard</Link>
-            {/* <Link to='/loginForm'>Login</Link> */}
             <Link to='/about'>About</Link>
-            <Button icon={<UserOutlined />} onClick={() => setIsShow(true)} />
+            <LoginForm setCredentials={setCredentials} />
           </Space>
         </Header>
         <Content style={{ textAlign: 'center' }}>
-          <LoginForm isShow={isShow} setIsShow={setIsShow} />
           <Routes>
-            <Route index element={<Home />} />
+            <Route index element={<Home credentials={credentials} />} />
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/about' element={<About />} />
             <Route path='/a/:aid' element={<DetailArticles />} />
-            {/* <Route path='/loginForm' element={<LoginForm />} /> */}
-            {/* <Route path='/loginForm' element={<LoginForm isShow={isShow} setIsShow={setIsShow} />} /> */}
             <Route path='*' element={<Error />} />
           </Routes>
-          {/* <MainTitle />
-          <Divider plain>Articles</Divider>
-          <Articles /> */}
         </Content>
         <Footer>
           <Copyright />

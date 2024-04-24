@@ -8,12 +8,16 @@ import { filmAPI } from "../commons/http-commons";
 import { articleAPI } from "../commons/http-commons";
 import axios from "axios";
 
-const Articles = () => {
+const Articles = ({ credentials }) => {
   const [articles, setArticles] = React.useState(null);
 
   React.useEffect(() => {
-    axios.get(`${articleAPI.url}/api/v1/articles`)
-    //axios.get(`${filmAPI.url}/api/v2/films`)
+    axios.get(`${articleAPI.url}/api/v1/articles`, {
+      headers: {
+        'Authorization': `Basic ${credentials}`
+      }
+    })
+
       .then((res) => {
         setArticles(res.data)
       })
@@ -26,7 +30,6 @@ const Articles = () => {
     return (
       <>
         <Flex justify="space-evenly" wrap="wrap" gap="middle">
-          {/* <Article title="Hello World">Hello Everyone</Article> */}
           {
             articles &&
             // articles.map(({ _id, title, director }) => (

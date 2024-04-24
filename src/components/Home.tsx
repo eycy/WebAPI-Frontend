@@ -4,12 +4,12 @@ import { Divider } from 'antd';
 import Articles from './Articles';
 import MainTitle from './MainTitle';
 
-const Home = () => {
+const Home = ({credentials}) => {
   return (
     <>
       <MainTitle />
       <Divider plain>Articles</Divider>
-      <Articles />
+      <Articles  credentials={credentials} />
     </>
   )
 }
