@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Modal, Checkbox, Space, Typography } from 'antd';
 
@@ -62,9 +63,7 @@ const LoginForm = ({ setCredentials, setIsLoggedIn, isLoggedIn }) => {
     {
       key: '1',
       label: (
-        <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-          Add New Listing
-        </a>
+        <Link to="/listingForm">Add New Listing</Link>
       ),
     },
     {

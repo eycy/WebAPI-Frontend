@@ -14,6 +14,7 @@ import Dashboard from './components/Dashboard';
 import About from './components/About';
 import Copyright from './components/Copyright';
 import LoginForm from './components/LoginForm';
+import ListingForm from './components/ListingForm';
 import Error from './components/Error';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
@@ -24,6 +25,7 @@ const { Text } = Typography;
 const App = () => {
   // const [isShow, setIsShow] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [articles, setArticles] = useState(null);
   // const [user, setUser] = useState(null);
 
   const [credentials, setCredentials] = useState("");
@@ -37,15 +39,16 @@ const App = () => {
             <Link to='/'>Home</Link>
             <Link to='/dashboard'>Dashboard</Link>
             <Link to='/about'>About</Link>
-            <LoginForm setCredentials={setCredentials} setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn}/>
+            <LoginForm setCredentials={setCredentials} setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
           </Space>
         </Header>
         <Content style={{ textAlign: 'center' }}>
           <Routes>
-            <Route index element={<Home credentials={credentials} isLoggedIn={isLoggedIn}/>} />
+            <Route index element={<Home credentials={credentials} isLoggedIn={isLoggedIn} articles={articles} setArticles={setArticles} />} />
+            <Route path='/listingForm' element={<ListingForm credentials={credentials} isLoggedIn={isLoggedIn} />} />
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/about' element={<About />} />
-            <Route path='/a/:aid' element={<DetailArticles />} />
+            <Route path='/a/:aid' element={<DetailArticles articles={articles} />} />
             <Route path='*' element={<Error />} />
           </Routes>
         </Content>

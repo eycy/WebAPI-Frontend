@@ -8,8 +8,7 @@ import { filmAPI } from "../commons/http-commons";
 import { articleAPI } from "../commons/http-commons";
 import axios from "axios";
 
-const Articles = ({ credentials, isLoggedIn }) => {
-  const [articles, setArticles] = React.useState(null);
+const Articles = ({ credentials, isLoggedIn, articles, setArticles }) => {
 
   React.useEffect(() => {
     axios.get(`${articleAPI.url}/api/v1/articles`, {
@@ -29,9 +28,7 @@ const Articles = ({ credentials, isLoggedIn }) => {
 
     return (
       <>
-        {isLoggedIn ? (
-        <Button type="primary">Add New Posting</Button>
-        ) : <div></div>}
+        
         
         <Flex justify="space-evenly" wrap="wrap" gap="middle">
           {
