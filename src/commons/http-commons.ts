@@ -6,5 +6,5 @@ export const filmAPI = {
 }
 
 export const articleAPI = {
-  url: "https://2864e1bf-8dcd-4a02-8418-0d9d62095657-00-1w1jzy6gmnx40.pike.replit.dev"
+  url: "https://29ee5011-9718-4356-bbda-de60e63443d7-00-35cvyq0z6s4d9.pike.replit.dev"
 }
