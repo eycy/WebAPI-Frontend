@@ -5,8 +5,8 @@ const { Title, Text } = Typography;
 const MainTitle = () => {
     return (
         <>
-            <Title>Blog - Class A</Title>
-            <Text type='success'>This is a sample blog demonstration for students to understand react</Text>
+            <Title>The Canine Shelter</Title>
+            <Text type='success'>You can’t change a dog’s past, but you could rewrite his future.</Text>
         </>
     )
 }
