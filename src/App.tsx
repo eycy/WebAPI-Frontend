@@ -6,9 +6,9 @@ import { useState } from 'react';
 import { Layout, Divider, Typography, FloatButton, Space, Button } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
-import Articles from './components/Articles';
+import Dogs from './components/Dogs';
 import MainTitle from './components/MainTitle';
-import DetailArticles from './components/DetailArticles';
+import DetailDogs from './components/DetailDogs';
 import Home from './components/Home';
 import Dashboard from './components/Dashboard';
 import About from './components/About';
@@ -25,7 +25,7 @@ const { Text } = Typography;
 const App = () => {
   // const [isShow, setIsShow] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [articles, setArticles] = useState(null);
+  const [dogs, setDogs] = useState(null);
   // const [user, setUser] = useState(null);
 
   const [credentials, setCredentials] = useState("");
@@ -44,11 +44,11 @@ const App = () => {
         </Header>
         <Content style={{ textAlign: 'center' }}>
           <Routes>
-            <Route index element={<Home credentials={credentials} isLoggedIn={isLoggedIn} articles={articles} setArticles={setArticles} />} />
+            <Route index element={<Home credentials={credentials} isLoggedIn={isLoggedIn} dogs={dogs} setDogs={setDogs} />} />
             <Route path='/listingForm' element={<ListingForm credentials={credentials} isLoggedIn={isLoggedIn} />} />
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/about' element={<About />} />
-            <Route path='/a/:aid' element={<DetailArticles articles={articles} />} />
+            <Route path='/a/:aid' element={<DetailDogs dogs={dogs} />} />
             <Route path='*' element={<Error />} />
           </Routes>
         </Content>

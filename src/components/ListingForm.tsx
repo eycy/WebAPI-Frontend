@@ -18,7 +18,7 @@ import { Typography } from 'antd';
 
 import { useNavigate } from 'react-router-dom';
 
-import { articleAPI } from "../commons/http-commons";
+import { dogAPI } from "../commons/http-commons";
 
 
 const { Title, Text } = Typography;
@@ -43,7 +43,7 @@ const ListingForm = ({ credentials, isLoggedIn }) => {
     const authorID = parseInt(values.authorID, 10);
 
     // Perform the login request to the server
-    const response = await fetch(`${articleAPI.url}/api/v1/articles`, {
+    const response = await fetch(`${dogAPI.url}/api/v1/dogs`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -91,18 +91,30 @@ const ListingForm = ({ credentials, isLoggedIn }) => {
             form={form}
             onFinish={handleSubmit}
           >
-            <Form.Item label="Name" name="title">
+            <Form.Item label="Name" name="name">
               <Input />
             </Form.Item>
-            <Form.Item label="Breed" name="allText">
+            <Form.Item label="Breed" name="breed_id">
               <Select>
-                <Select.Option value="demo">Demo</Select.Option>
+                <Select.Option value={1}>Akita</Select.Option>
+                <Select.Option value={2}>Bouvier</Select.Option>
+                <Select.Option value={3}>Dachshund</Select.Option>
+                <Select.Option value={4}>German Shepherd</Select.Option>
+                <Select.Option value={5}>Otterhound</Select.Option>
+                <Select.Option value={6}>Terrier</Select.Option>
               </Select>
             </Form.Item>
-            <Form.Item label="Date of Birth" >
+            <Form.Item label="Location" name="location">
+              <Select>
+                <Select.Option value="Aberdeen">Aberdeen</Select.Option>
+                <Select.Option value="Jordan">Jordan</Select.Option>
+                <Select.Option value="Shatin">Shatin</Select.Option>
+              </Select>
+            </Form.Item>
+            <Form.Item label="Date of Birth" name="dob">
               <DatePicker />
             </Form.Item>
-            <Form.Item label="Description" >
+            <Form.Item label="Description" name="description">
               <TextArea rows={4} />
             </Form.Item>
             <Form.Item label="Author ID" name="authorID">

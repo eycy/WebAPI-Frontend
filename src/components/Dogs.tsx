@@ -1,28 +1,28 @@
 import React from 'react';
 import { Flex, Button } from "antd";
-import Article from "./Article";
-// import articles from "./articles.json";
+import Dog from "./Dog";
+// import dogs from "./dogs.json";
 // import { Link } from "react-router-dom";
 import { blogAPI } from "../commons/http-commons";
 import { filmAPI } from "../commons/http-commons";
-import { articleAPI } from "../commons/http-commons";
+import { dogAPI } from "../commons/http-commons";
 import axios from "axios";
 
-const Articles = ({ credentials, isLoggedIn, articles, setArticles }) => {
+const Dogs = ({ credentials, isLoggedIn, dogs, setDogs }) => {
 
   React.useEffect(() => {
-    axios.get(`${articleAPI.url}/api/v1/articles`, {
+    axios.get(`${dogAPI.url}/api/v1/dogs`, {
       headers: {
         'Authorization': `Basic ${credentials}`
       }
     })
 
       .then((res) => {
-        setArticles(res.data)
+        setDogs(res.data)
       })
   }, [])
 
-  if (!articles) {
+  if (!dogs) {
     return (<div>loading...</div>)
   } else {
 
@@ -32,10 +32,10 @@ const Articles = ({ credentials, isLoggedIn, articles, setArticles }) => {
         
         <Flex justify="space-evenly" wrap="wrap" gap="middle">
           {
-            articles &&
-            articles.map(({ id, title, description }) => (
+            dogs &&
+            dogs.map(({ id, name, description }) => (
               <>
-                <Article isLoggedIn={isLoggedIn} title={title} key={id} href={id}>{description}</Article>
+                <Dog isLoggedIn={isLoggedIn} name={name} key={id} href={id}>{description}</Dog>
               </>
             ))
           }
@@ -45,4 +45,4 @@ const Articles = ({ credentials, isLoggedIn, articles, setArticles }) => {
   }
 }
 
-export default Articles;
+export default Dogs;

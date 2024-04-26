@@ -7,7 +7,7 @@ import { DownOutlined, SmileOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Dropdown } from 'antd';
 
-import { articleAPI } from "../commons/http-commons";
+import { dogAPI } from "../commons/http-commons";
 
 interface loginFields {
   username?: string;
@@ -27,7 +27,7 @@ const LoginForm = ({ setCredentials, setIsLoggedIn, isLoggedIn }) => {
       const base64Credentials = btoa(`${values.username}:${values.password}`);
 
       // Perform the login request to the server
-      const response = await fetch(`${articleAPI.url}/api/v1/login`, {
+      const response = await fetch(`${dogAPI.url}/api/v1/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ const LoginForm = ({ setCredentials, setIsLoggedIn, isLoggedIn }) => {
       ) : (
         <>
           <Button icon={<UserOutlined />} onClick={() => { setIsShow(true) }} />
-          <Modal open={isShow} onCancel={() => { setIsShow(false) }} title="Welcome Blogger" footer={[]}>
+          <Modal open={isShow} onCancel={() => { setIsShow(false) }} title="Welcome" footer={[]}>
             <Form onFinish={handleSubmit}>
               <Form.Item label="Username" name="username"
                 rules={[{ required: true, message: 'Missing username' }]}>

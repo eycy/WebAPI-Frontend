@@ -4,7 +4,7 @@ import { EditOutlined, DeleteOutlined, InfoCircleOutlined, SettingOutlined } fro
 
 const { Meta } = Card
 
-const Article = (props) => {
+const Dog = (props) => {
   return (
     <>
       <Card
@@ -18,7 +18,7 @@ const Article = (props) => {
           <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>
         ])}
       >
-        <Meta title={props.title} description={props.children} />
+        <Meta name={props.name} description={props.name} />
       </Card>
 
 
@@ -29,4 +29,4 @@ const Article = (props) => {
 
 
 
-export default Article;
+export default Dog;

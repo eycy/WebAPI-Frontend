@@ -1,19 +1,19 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-// import articles from './articles.json';
+// import dogs from './dogs.json';
 import { Button } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
 
-const DetailArticles = ({ articles }) => {
+const DetailDogs = ({ dogs }) => {
   const { aid } = useParams();
   const navigate = useNavigate();
 
-  for (const article of articles) {
-    if (article.id == +aid) {
+  for (const dog of dogs) {
+    if (dog.id == +aid) {
       return (
         <>
-          <h1>{article.title}</h1>
-          <h1>{article.alltext}</h1>
+          <h1>{dog.name}</h1>
+          <h1>{dog.description}</h1>
           <Button onClick={() => navigate(-1)} icon={<RollbackOutlined />}></Button>
         </>
       )
@@ -22,4 +22,4 @@ const DetailArticles = ({ articles }) => {
 
 }
 
-export default DetailArticles;
+export default DetailDogs;

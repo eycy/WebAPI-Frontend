@@ -5,6 +5,6 @@ export const filmAPI = {
   url: "https://pcpdfilm.starsknights.com:18888"
 }
 
-export const articleAPI = {
+export const dogAPI = {
   url: "https://29ee5011-9718-4356-bbda-de60e63443d7-00-35cvyq0z6s4d9.pike.replit.dev"
 }
