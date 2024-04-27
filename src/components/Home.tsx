@@ -4,12 +4,12 @@ import { Divider } from 'antd';
 import Dogs from './Dogs';
 import MainTitle from './MainTitle';
 
-const Home = ({ credentials, isLoggedIn, dogs, setDogs }) => {
+const Home = ({ credentials, isLoggedIn, dogs, setDogs, setIsEditMode }) => {
   return (
     <>
       <MainTitle />
       <Divider plain>Dogs Availble for Adoption</Divider>
-      <Dogs credentials={credentials} isLoggedIn={isLoggedIn} dogs={dogs} setDogs={setDogs} />
+      <Dogs credentials={credentials} isLoggedIn={isLoggedIn} dogs={dogs} setDogs={setDogs} setIsEditMode={setIsEditMode} />
     </>
   )
 }

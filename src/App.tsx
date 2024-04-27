@@ -18,6 +18,8 @@ import ListingForm from './components/ListingForm';
 import Error from './components/Error';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
+import DogContext from './contexts/DogContext';
+
 const { Header, Footer, Content } = Layout;
 const { Text } = Typography;
 
@@ -25,7 +27,9 @@ const { Text } = Typography;
 const App = () => {
   // const [isShow, setIsShow] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [dogs, setDogs] = useState(null);
+  const [selectedDog, setSelectedDog] = useState(null);
   // const [user, setUser] = useState(null);
 
   const [credentials, setCredentials] = useState("");
@@ -43,14 +47,16 @@ const App = () => {
           </Space>
         </Header>
         <Content style={{ textAlign: 'center' }}>
-          <Routes>
-            <Route index element={<Home credentials={credentials} isLoggedIn={isLoggedIn} dogs={dogs} setDogs={setDogs} />} />
-            <Route path='/listingForm' element={<ListingForm credentials={credentials} isLoggedIn={isLoggedIn} />} />
-            <Route path='/dashboard' element={<Dashboard />} />
-            <Route path='/about' element={<About />} />
-            <Route path='/a/:aid' element={<DetailDogs dogs={dogs} />} />
-            <Route path='*' element={<Error />} />
-          </Routes>
+          <DogContext.Provider value={{ selectedDog, setSelectedDog }}>
+            <Routes>
+              <Route index element={<Home credentials={credentials} isLoggedIn={isLoggedIn} dogs={dogs} setDogs={setDogs} setIsEditMode={setIsEditMode}/>} />
+              <Route path='/listingForm' element={<ListingForm credentials={credentials} isLoggedIn={isLoggedIn} isEditMode={isEditMode}/>} />
+              <Route path='/dashboard' element={<Dashboard />} />
+              <Route path='/about' element={<About />} />
+              <Route path='/a/:aid' element={<DetailDogs dogs={dogs} />} />
+              <Route path='*' element={<Error />} />
+            </Routes>
+          </DogContext.Provider>
         </Content>
         <Footer>
           <Copyright />
