@@ -1,13 +1,22 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Card, Button, Modal } from "antd";
 import { Link } from 'react-router-dom';
 import { EditOutlined, DeleteOutlined, InfoCircleOutlined, SettingOutlined } from '@ant-design/icons';
+import DogContext from '../contexts/DogContext';
 
 const { Meta } = Card
 
 const Dog = (props) => {
 
   const [modalVisible, setModalVisible] = useState(false);
+  const { setSelectedDog } = useContext(DogContext);
+
+  const dog = props.dog;
+
+  const handleEdit = () => {
+    setSelectedDog(dog);
+    props.setIsEditMode(true);
+  }
 
   return (
     <>
@@ -16,7 +25,12 @@ const Dog = (props) => {
         cover={<img alt="example" src="https://dummyimage.com/medrect" />}
         actions={props.isLoggedIn ? ([
           <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>,
-          <EditOutlined key="edit" />,
+          <Link
+            to="/listingForm"
+            onClick={handleEdit}
+          >
+            <EditOutlined key="edit" />
+          </Link>,
           <DeleteOutlined key="delete" onClick={() => setModalVisible(true)} />
         ]) : ([
           <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>

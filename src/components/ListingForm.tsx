@@ -15,22 +15,34 @@ import {
 } from 'antd';
 
 import { Typography } from 'antd';
-
+import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 
 import { dogAPI } from "../commons/http-commons";
-
+import { useContext } from 'react';
+import DogContext from '../contexts/DogContext';
 
 const { Title, Text } = Typography;
 
 type SizeType = Parameters<typeof Form>[0]['size'];
 
-const ListingForm = ({ credentials, isLoggedIn }) => {
+const ListingForm = ({ credentials, isLoggedIn, isEditMode }) => {
 
   const navigate = useNavigate();
   const [form] = Form.useForm(); // Create the form instance
   const { TextArea } = Input;
   const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default');
+  const { selectedDog } = useContext(DogContext);
+
+  const initialValues = {
+    name: selectedDog?.name || '',
+    breed_id: selectedDog?.breed_id || '',
+    location: selectedDog?.location || '',
+    dob: selectedDog?.dob ? moment(selectedDog.dob) : null,
+    description: selectedDog?.description || '',
+    authorID: selectedDog?.authorid || '',
+    size: componentSize
+  };
 
   const onFormLayoutChange = ({ size }: { size: SizeType }) => {
     setComponentSize(size);
@@ -39,12 +51,19 @@ const ListingForm = ({ credentials, isLoggedIn }) => {
   const handleSubmit = async (values) => {
     console.log('Received values of form: ', values);
 
-    // Convert userId to integer
+    // Convert authorID to integer
     const authorID = parseInt(values.authorID, 10);
 
     // Perform the login request to the server
-    const response = await fetch(`${dogAPI.url}/api/v1/dogs`, {
-      method: 'POST',
+    let method = 'POST'
+    let url = `${dogAPI.url}/api/v1/dogs`
+    if (isEditMode) {
+      method = 'PUT';
+      url = `${dogAPI.url}/api/v1/dogs/${selectedDog.id}`
+    }
+      
+    const response = await fetch(url, {
+      method: method,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Basic ${credentials}`
@@ -54,16 +73,20 @@ const ListingForm = ({ credentials, isLoggedIn }) => {
 
 
     if (response.ok) {
-      console.log(response.data);
-
-      message.success('Listing is added successfully.');
-
-      console.log("before reset");
-      console.log(form);
-      form.resetFields();
-      console.log("after reset");
+      if (isEditMode) {
+        message.success('Listing is updated successfully.');
+        navigate(-1);
+      } else {
+        message.success('Listing is added successfully.');
+        form.resetFields();
+      }
     } else {
-      message.error('Failed to add listing.');
+      if (isEditMode) {
+        message.error('Failed to update listing.');
+      } else {
+        message.error('Failed to add listing.');
+
+      }
     }
 
   };
@@ -78,13 +101,13 @@ const ListingForm = ({ credentials, isLoggedIn }) => {
     <>
       {isLoggedIn ? (
         <div style={{ textAlign: 'left', marginLeft: '20px' }}>
-          <Title>Create New Listing</Title>
+          {isEditMode ? (<Title>Edit Listing</Title>) : (<Title>Create New Listing</Title>)}
           <Form
             labelCol={{ span: 4 }}
             labelAlign="right"
             wrapperCol={{ span: 14 }}
             layout="horizontal"
-            initialValues={{ size: componentSize }}
+            initialValues={initialValues}
             onValuesChange={onFormLayoutChange}
             size={componentSize as SizeType}
             style={{ maxWidth: 600, marginTop: '20px' }}
