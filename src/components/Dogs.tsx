@@ -61,6 +61,7 @@ const Dogs = ({ credentials, isLoggedIn, dogs, setDogs, setIsEditMode }) => {
                     href={dog.id}
                     handleDelete={() => handleDelete(dog.id)}
                     setIsEditMode={setIsEditMode}
+                    isLoggedIn={isLoggedIn}
                   />
                 ))}
               </Flex>
