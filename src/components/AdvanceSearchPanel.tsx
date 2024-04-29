@@ -25,6 +25,20 @@ const AdvanceSearchPanel = ({ onAdvSearch, isAdvanceSearchOpen }) => {
     size: componentSize
   };
 
+  const onFinish = (values) => {
+    // Format the date of birth
+    const dob = values.dob ? values.dob.format('YYYY-MM-DD') : '';
+
+    // Modify the values object to include the formatted date of birth
+    const updatedValues = {
+      ...values,
+      dob
+    };
+
+    // Call the onAdvSearch function with the updated values
+    onAdvSearch(updatedValues);
+  };
+
   return (
     <>
 
@@ -41,7 +55,7 @@ const AdvanceSearchPanel = ({ onAdvSearch, isAdvanceSearchOpen }) => {
             size={componentSize as SizeType}
             style={{ padding: '10px', maxWidth: 1000, marginTop: '20px' }}
             form={form}
-            onFinish={onAdvSearch}
+            onFinish={onFinish}
           >
             <Row gutter={24}>
               <Col span={9}>
