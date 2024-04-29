@@ -8,7 +8,7 @@ const Home = ({ credentials, isLoggedIn, dogs, setDogs, setIsEditMode }) => {
   return (
     <>
       <MainTitle />
-      <Divider plain>Dogs Availble for Adoption</Divider>
+      <Divider plain>Dogs Available for Adoption</Divider>
       <Dogs credentials={credentials} isLoggedIn={isLoggedIn} dogs={dogs} setDogs={setDogs} setIsEditMode={setIsEditMode} />
     </>
   )
