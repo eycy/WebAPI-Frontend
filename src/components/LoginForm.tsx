@@ -106,8 +106,11 @@ const LoginForm = ({ setCredentials, setIsLoggedIn, isLoggedIn }) => {
                 <Text type="danger">Incorrect username or password</Text>
               )}
               <div>
+                <Space>
                 <Button type="primary" htmlType="submit">Login</Button>
-              </div>
+                Or <a href="/createuser">Register now!</a>
+                  </Space>
+                </div>
             </Form>
           </Modal>
         </>

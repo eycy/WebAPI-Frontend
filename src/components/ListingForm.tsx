@@ -54,8 +54,7 @@ const ListingForm = ({ credentials, isLoggedIn, isEditMode }) => {
     // Convert authorID to integer
     const authorID = parseInt(values.authorID, 10);
 
-    // Perform the login request to the server
-    let method = 'POST'
+    let method = 'POST' 
     let url = `${dogAPI.url}/api/v1/dogs`
     if (isEditMode) {
       method = 'PUT';
