@@ -49,11 +49,14 @@ const Dog = (props) => {
     }
   };
 
+  if (dog.new_filename == null)
+    dog.new_filename = 'Photo_Not_Available.jpg'
+  
   return (
     <>
       <Card
-        style={{ width: 300 }}
-        cover={<img alt="example" src="https://dummyimage.com/medrect" />}
+        style={{ width: 300, height: 'fit-content' }}
+        cover={<img alt="Dog Photo" src={`${dogAPI.url}/api/v1/dogs/photos?name=${dog.new_filename}`} />}
         actions={props.isLoggedIn ? ([
           <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>,
           <Link
@@ -62,12 +65,7 @@ const Dog = (props) => {
           >
             <EditOutlined key="edit" />
           </Link>,
-
-          <Link
-            onClick={() => setUploadModalVisible(true)}
-          >
-            <UploadOutlined key="upload" />
-          </Link>,
+          <UploadOutlined key="uploadPhoto" onClick={() => setUploadModalVisible(true)} />,
           <DeleteOutlined key="delete" onClick={() => setModalVisible(true)} />
         ]) : ([
           <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>
