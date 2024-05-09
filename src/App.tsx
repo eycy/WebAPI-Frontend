@@ -15,6 +15,7 @@ import About from './components/About';
 import Copyright from './components/Copyright';
 import LoginForm from './components/LoginForm';
 import ListingForm from './components/ListingForm';
+import UserCreationForm from './components/UserCreationForm';
 import Error from './components/Error';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
@@ -54,6 +55,7 @@ const App = () => {
               <Route path='/dashboard' element={<Dashboard />} />
               <Route path='/about' element={<About />} />
               <Route path='/a/:aid' element={<DetailDogs dogs={dogs} />} />
+              <Route path='/createuser' element={<UserCreationForm />} />
               <Route path='*' element={<Error />} />
             </Routes>
           </DogContext.Provider>
