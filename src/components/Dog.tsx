@@ -36,8 +36,10 @@ const Dog = (props) => {
       });
 
       if (response.ok) {
+        const responseData = await response.json(); // Parse the JSON response
+        const { newFileName } = responseData; // Extract the newFileName value
+        dog.new_filename = newFileName;
         message.success('Photo uploaded successfully.');
-        // Refresh the dog data or update the photo URL
       } else {
         // Failed to upload photo
         message.error('Photo uploaded failed');
