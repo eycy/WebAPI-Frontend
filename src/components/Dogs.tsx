@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Flex, Input, Row, Col } from "antd";
 import Dog from "./Dog";
 import SearchBar from "./SearchBar";
@@ -8,9 +8,33 @@ import axios from "axios";
 
 const { Search } = Input;
 
-const Dogs = ({ credentials, isLoggedIn, dogs, setDogs, setIsEditMode }) => {
+const Dogs = ({ credentials, isLoggedIn, isStaff, dogs, setDogs, setIsEditMode }) => {
   const [loading, setLoading] = useState(false); // Add loading state variable
+  const [favoriteDogIds, setFavoriteDogIds] = useState([]);
 
+  const fetchFavorites = async () => {
+    try {
+      const response = await axios.get(`${dogAPI.url}/api/v1/users/favorites`, {
+        headers: {
+          'Authorization': `Basic ${credentials}`
+        }
+      });
+
+      if (response.status === 200) {
+        const { dogIds } = response.data;
+        setFavoriteDogIds(dogIds);
+      } else {
+        // Handle the response error
+      }
+    } catch (error) {
+      // Handle the fetch error
+    }
+  };
+
+  useEffect(() => {
+    fetchFavorites();
+  }, [credentials]);
+  
   const handleDelete = async (id) => {
     try {
       await axios.delete(`${dogAPI.url}/api/v1/dogs/${id}`, {
@@ -63,7 +87,9 @@ const Dogs = ({ credentials, isLoggedIn, dogs, setDogs, setIsEditMode }) => {
                     handleDelete={() => handleDelete(dog.id)}
                     setIsEditMode={setIsEditMode}
                     isLoggedIn={isLoggedIn}
+                    isStaff={isStaff}
                     credentials={credentials}
+                    isFavorite={favoriteDogIds.includes(dog.id)}
                   />
                 ))}
               </Flex>

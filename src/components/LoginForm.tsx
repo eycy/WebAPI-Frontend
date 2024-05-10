@@ -16,7 +16,7 @@ interface loginFields {
 
 const { Text } = Typography;
 
-const LoginForm = ({ setCredentials, setIsLoggedIn, isLoggedIn }) => {
+const LoginForm = ({ setCredentials, setIsLoggedIn, isLoggedIn, setIsStaff }) => {
   const [isShow, setIsShow] = React.useState(false);
   const [getUser, setUser] = useState(null);
   const [loginError, setLoginError] = useState(false);
@@ -43,6 +43,7 @@ const LoginForm = ({ setCredentials, setIsLoggedIn, isLoggedIn }) => {
         // Update the state and store the authentication tokens
         setIsLoggedIn(true);
         setUser(user);
+        setIsStaff(user.isStaff);
         setCredentials(base64Credentials);
       } else {
         // Login failed
@@ -107,10 +108,10 @@ const LoginForm = ({ setCredentials, setIsLoggedIn, isLoggedIn }) => {
               )}
               <div>
                 <Space>
-                <Button type="primary" htmlType="submit">Login</Button>
-                Or <a href="/createuser">Register now!</a>
-                  </Space>
-                </div>
+                  <Button type="primary" htmlType="submit">Login</Button>
+                  Or <a href="/createuser">Register now!</a>
+                </Space>
+              </div>
             </Form>
           </Modal>
         </>

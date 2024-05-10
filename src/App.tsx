@@ -28,6 +28,7 @@ const { Text } = Typography;
 const App = () => {
   // const [isShow, setIsShow] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isStaff, setIsStaff] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [dogs, setDogs] = useState(null);
   const [selectedDog, setSelectedDog] = useState(null);
@@ -44,13 +45,13 @@ const App = () => {
             <Link to='/'>Home</Link>
             <Link to='/dashboard'>Dashboard</Link>
             <Link to='/about'>About</Link>
-            <LoginForm setCredentials={setCredentials} setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
+            <LoginForm setCredentials={setCredentials} setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} setIsStaff={setIsStaff} />
           </Space>
         </Header>
         <Content style={{ textAlign: 'center' }}>
           <DogContext.Provider value={{ selectedDog, setSelectedDog }}>
             <Routes>
-              <Route index element={<Home credentials={credentials} isLoggedIn={isLoggedIn} dogs={dogs} setDogs={setDogs} setIsEditMode={setIsEditMode}/>} />
+              <Route index element={<Home credentials={credentials} isLoggedIn={isLoggedIn} isStaff={isStaff} dogs={dogs} setDogs={setDogs} setIsEditMode={setIsEditMode}/>} />
               <Route path='/listingForm' element={<ListingForm credentials={credentials} isLoggedIn={isLoggedIn} isEditMode={isEditMode}/>} />
               <Route path='/dashboard' element={<Dashboard />} />
               <Route path='/about' element={<About />} />

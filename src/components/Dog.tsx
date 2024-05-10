@@ -1,7 +1,7 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Card, Button, Modal, message, Upload } from "antd";
 import { Link } from 'react-router-dom';
-import { EditOutlined, DeleteOutlined, InfoCircleOutlined, UploadOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, InfoCircleOutlined, UploadOutlined, HeartOutlined, HeartFilled } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
 import DogContext from '../contexts/DogContext';
 import { dogAPI } from "../commons/http-commons";
@@ -14,6 +14,8 @@ const Dog = (props) => {
   const [modalUploadVisible, setUploadModalVisible] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const { setSelectedDog } = useContext(DogContext);
+  const [setIsFavorite] = useState(false);
+  
 
   const dog = props.dog;
 
@@ -53,25 +55,36 @@ const Dog = (props) => {
 
   if (dog.new_filename == null)
     dog.new_filename = 'Photo_Not_Available.jpg'
-  
+
   return (
     <>
       <Card
         style={{ width: 300, height: 'fit-content' }}
         cover={<img alt="Dog Photo" src={`${dogAPI.url}/api/v1/dogs/photos?name=${dog.new_filename}`} />}
-        actions={props.isLoggedIn ? ([
-          <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>,
-          <Link
-            to="/listingForm"
-            onClick={handleEdit}
-          >
-            <EditOutlined key="edit" />
-          </Link>,
-          <UploadOutlined key="uploadPhoto" onClick={() => setUploadModalVisible(true)} />,
-          <DeleteOutlined key="delete" onClick={() => setModalVisible(true)} />
-        ]) : ([
-          <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>
-        ])}
+        actions={
+          props.isLoggedIn && props.isStaff ? ( // Condition 1: Staff
+            [
+              <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>,
+              <Link to="/listingForm" onClick={handleEdit}><EditOutlined key="edit" /></Link>,
+              <UploadOutlined key="uploadPhoto" onClick={() => setUploadModalVisible(true)} />,
+              <DeleteOutlined key="delete" onClick={() => setModalVisible(true)} />
+            ]
+          ) : props.isLoggedIn && props.isFavorite ? ( // Condition 2a: public user + fav
+            [
+              <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>,
+              <HeartFilled key="fav" onClick={() => setIsFavorite(false)} />
+            ]
+          ) : props.isLoggedIn && !props.isFavorite ? ( // Condition 2b: public user + not fav
+            [
+              <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>,
+              <HeartOutlined key="notFav" onClick={() => setIsFavorite(true)} />
+            ]
+          ) : ( // Condition 3: not logged in
+            [
+              <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>
+            ]
+          )
+        }
       >
         <Meta name={props.name} description={props.name} />
       </Card>
