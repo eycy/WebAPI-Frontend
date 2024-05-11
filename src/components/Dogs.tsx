@@ -59,9 +59,11 @@ const Dogs = ({ credentials, isLoggedIn, dogs, setDogs, setIsEditMode }) => {
                     name={dog.name}
                     key={dog.id}
                     href={dog.id}
+                    image={dog.new_filename}
                     handleDelete={() => handleDelete(dog.id)}
                     setIsEditMode={setIsEditMode}
                     isLoggedIn={isLoggedIn}
+                    credentials={credentials}
                   />
                 ))}
               </Flex>
