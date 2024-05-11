@@ -1,7 +1,7 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Card, Button, Modal, message, Upload } from "antd";
 import { Link } from 'react-router-dom';
-import { EditOutlined, DeleteOutlined, InfoCircleOutlined, UploadOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, InfoCircleOutlined, UploadOutlined, HeartOutlined, HeartFilled } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
 import DogContext from '../contexts/DogContext';
 import { dogAPI } from "../commons/http-commons";
@@ -10,12 +10,21 @@ const { Meta } = Card
 
 const Dog = (props) => {
 
+  const dog = props.dog;
+  
   const [modalVisible, setModalVisible] = useState(false);
   const [modalUploadVisible, setUploadModalVisible] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const { setSelectedDog } = useContext(DogContext);
+  const [isFavorite, setIsFavorite] = useState(props.favoriteDogIds.includes(dog.id));
 
-  const dog = props.dog;
+  useEffect(() => {
+    if (props.favoriteDogIds.includes(dog.id)) {
+      setIsFavorite(true);
+    } else {
+      setIsFavorite(false);
+    }
+  }, [props.favoriteDogIds]);
 
   const handleEdit = () => {
     setSelectedDog(dog);
@@ -51,27 +60,83 @@ const Dog = (props) => {
     }
   };
 
+
+  const toggleFavorite = async () => {
+    try {
+      let response;
+      let msgSuccess = 'Added to favorites.';
+      let msgFail = 'Failed to add to favorites';
+      setIsFavorite(!isFavorite);
+      if (!props.favoriteDogIds.includes(dog.id))  {
+        response = await fetch(`${dogAPI.url}/api/v1/users/addFavorite`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Basic ${props.credentials}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            dogid: dog.id
+          }),
+        });
+      } else {
+        response = await fetch(`${dogAPI.url}/api/v1/users/removeFavorite`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Basic ${props.credentials}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            dogid: dog.id
+          }),
+        });
+        msgSuccess = 'Removed from favorites.';
+        msgFail = 'Failed to remove from favorites';
+      }
+
+      if (response.ok) {
+        props.fetchFavorites();
+        message.success(msgSuccess);
+      } else {
+        setIsFavorite(!isFavorite);
+        message.error(msgFail);
+      }
+    } catch (error) {
+      message.error('Error occurred updating favorites');
+    }
+  };
+
   if (dog.new_filename == null)
     dog.new_filename = 'Photo_Not_Available.jpg'
-  
+
   return (
     <>
       <Card
         style={{ width: 300, height: 'fit-content' }}
         cover={<img alt="Dog Photo" src={`${dogAPI.url}/api/v1/dogs/photos?name=${dog.new_filename}`} />}
-        actions={props.isLoggedIn ? ([
-          <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>,
-          <Link
-            to="/listingForm"
-            onClick={handleEdit}
-          >
-            <EditOutlined key="edit" />
-          </Link>,
-          <UploadOutlined key="uploadPhoto" onClick={() => setUploadModalVisible(true)} />,
-          <DeleteOutlined key="delete" onClick={() => setModalVisible(true)} />
-        ]) : ([
-          <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>
-        ])}
+        actions={
+          props.isLoggedIn && props.isStaff ? ( // Condition 1: Staff
+            [
+              <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>,
+              <Link to="/listingForm" onClick={handleEdit}><EditOutlined key="edit" /></Link>,
+              <UploadOutlined key="uploadPhoto" onClick={() => setUploadModalVisible(true)} />,
+              <DeleteOutlined key="delete" onClick={() => setModalVisible(true)} />
+            ]
+          ) : props.isLoggedIn && isFavorite ? ( // Condition 2a: public user + fav
+            [
+              <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>,
+              <HeartFilled key="fav" onClick={toggleFavorite} />
+            ]
+          ) : props.isLoggedIn && !isFavorite ? ( // Condition 2b: public user + not fav
+            [
+              <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>,
+              <HeartOutlined key="notFav" onClick={toggleFavorite} />
+            ]
+          ) : ( // Condition 3: not logged in
+            [
+              <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>
+            ]
+          )
+        }
       >
         <Meta name={props.name} description={props.name} />
       </Card>
