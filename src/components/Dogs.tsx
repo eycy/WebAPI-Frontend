@@ -9,7 +9,7 @@ import axios from "axios";
 const { Search } = Input;
 
 const Dogs = ({ credentials, isLoggedIn, isStaff, dogs, setDogs, setIsEditMode }) => {
-  const [loading, setLoading] = useState(false); // Add loading state variable
+  const [loading, setLoading] = useState(false); 
   const [favoriteDogIds, setFavoriteDogIds] = useState([]);
 
   const fetchFavorites = async () => {
@@ -89,7 +89,8 @@ const Dogs = ({ credentials, isLoggedIn, isStaff, dogs, setDogs, setIsEditMode }
                     isLoggedIn={isLoggedIn}
                     isStaff={isStaff}
                     credentials={credentials}
-                    isFavorite={favoriteDogIds.includes(dog.id)}
+                    favoriteDogIds={favoriteDogIds}
+                    fetchFavorites={fetchFavorites}
                   />
                 ))}
               </Flex>
