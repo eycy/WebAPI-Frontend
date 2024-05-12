@@ -19,7 +19,19 @@ import UserCreationForm from './components/UserCreationForm';
 import Error from './components/Error';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
+import './public/css/animate.css';
+
+import './public/css/font-awesome.min.css';
+import './public/css/flaticon.css';
+import './public/css/owl.carousel.min.css';
+import './public/css/owl.theme.default.min.css';
+import './public/css/bootstrap.min.css';
+import './public/css/bootsnav.css';
+import './public/css/style.css';
+import './public/css/responsive.css';
+
 import DogContext from './contexts/DogContext';
+
 
 const { Header, Footer, Content } = Layout;
 const { Text } = Typography;
@@ -40,13 +52,15 @@ const App = () => {
   return (
     <Router>
       <Layout >
-        <Header title='Blog' style={{ width: '100%', zIndex: 1, position: 'sticky', top: 0 }}>
+        <Header className="top-area header-area navbar navbar-default bootsnav navbar-fixed dark no-background navbar-header" title='Blog' style={{ width: '100%', zIndex: 1, position: 'sticky', top: 0 }}>
+          <div class-name="nav navbar-nav navbar-right">
           <Space>
             <Link to='/'>Home</Link>
             <Link to='/dashboard'>Dashboard</Link>
             <Link to='/about'>About</Link>
             <LoginForm setCredentials={setCredentials} setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} setIsStaff={setIsStaff} />
-          </Space>
+            </Space>
+              </div>
         </Header>
         <Content style={{ textAlign: 'center' }}>
           <DogContext.Provider value={{ selectedDog, setSelectedDog }}>
