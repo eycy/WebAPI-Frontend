@@ -3,7 +3,7 @@ import { Table, Modal, Input, Button, message } from 'antd';
 import { dogAPI } from "../commons/http-commons";
 
 const Adoption = ({ isLoggedIn, isStaff, credentials }) => {
-    const [adoptionMessages, setAdoptionMessages] = useState([]);
+    const [adoptions, setAdoptions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedAdoption, setSelectedAdoption] = useState(null);
@@ -11,10 +11,10 @@ const Adoption = ({ isLoggedIn, isStaff, credentials }) => {
     const [refreshTable, setRefreshTable] = useState(false);
 
     useEffect(() => {
-        const fetchAdoptionMessages = async () => {
+        const fetchAdoptions = async () => {
             try {
                 setLoading(true);
-                const endpoint = isStaff ? '/api/v1/users/getAllAdoptionMessages' : '/api/v1/users/getAdoptionMessages';
+                const endpoint = isStaff ? '/api/v1/users/getAllAdoptions' : '/api/v1/users/getAdoptions';
                 const response = await fetch(`${dogAPI.url}${endpoint}`, {
                     method: 'GET',
                     headers: {
@@ -23,7 +23,7 @@ const Adoption = ({ isLoggedIn, isStaff, credentials }) => {
                 });
                 const data = await response.json();
                 if (response.ok) {
-                    setAdoptionMessages(data.result.messages);
+                    setAdoptions(data.result.messages);
                 } else {
                     console.error('Failed to fetch adoption messages:', data.error);
                 }
@@ -34,13 +34,13 @@ const Adoption = ({ isLoggedIn, isStaff, credentials }) => {
             }
         };
 
-        fetchAdoptionMessages();
+        fetchAdoptions();
     }, [isStaff, credentials, refreshTable]);
 
     const handleReply = async (adoptionId, isAccept) => {
 
         try {
-            const response = await fetch(`${dogAPI.url}/api/v1/users/replyAdoptionMessage`, {
+            const response = await fetch(`${dogAPI.url}/api/v1/users/replyAdoption`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Basic ${credentials}`,
@@ -57,6 +57,7 @@ const Adoption = ({ isLoggedIn, isStaff, credentials }) => {
                 message.success(data.message);
                 setModalVisible(false);
                 setRefreshTable(!refreshTable);
+                setResponseMessage('');
             } else {
                 console.error('Failed to reply to adoption message:', data.error);
             }
@@ -176,7 +177,7 @@ const Adoption = ({ isLoggedIn, isStaff, credentials }) => {
             <div>
                 <h1>Adoptions</h1>
                 <Table
-                    dataSource={adoptionMessages}
+                    dataSource={adoptions}
                     columns={columns}
                     loading={loading}
                     rowKey="id"

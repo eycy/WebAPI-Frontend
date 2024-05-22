@@ -23,7 +23,12 @@ const DetailDogs = ({ dogs, isLoggedIn, isStaff, credentials }) => {
       .catch(error => console.error(error));
 
     // Fetch the user's adoptions
-    fetch(`${dogAPI.url}/api/v1/users/getAdoptionMessages`, {
+    getUserAdoption();
+  }, [aid, credentials]);
+
+  const getUserAdoption = async () => {
+    // Fetch the user's adoptions
+    fetch(`${dogAPI.url}/api/v1/users/getAdoptions`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -39,7 +44,7 @@ const DetailDogs = ({ dogs, isLoggedIn, isStaff, credentials }) => {
         }
       })
       .catch(error => console.error(error));
-  }, [aid, credentials]);
+  }
 
   const handleAdopt = (dog) => {
     setAdoptingDog(dog);
@@ -65,6 +70,7 @@ const DetailDogs = ({ dogs, isLoggedIn, isStaff, credentials }) => {
         // Disable the adopt button after successful submission
         setAdoptingDog({ ...adoptingDog, requested: true });
         setAdoptionMessage('');
+        getUserAdoption();
       } else {
         message.error('Failed to send adoption request.');
       }
