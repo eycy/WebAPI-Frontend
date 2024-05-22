@@ -9,7 +9,7 @@ import axios from "axios";
 const { Search } = Input;
 
 const Dogs = ({ credentials, isLoggedIn, isStaff, dogs, setDogs, setIsEditMode }) => {
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const [favoriteDogIds, setFavoriteDogIds] = useState([]);
 
   const fetchFavorites = async () => {
@@ -34,7 +34,7 @@ const Dogs = ({ credentials, isLoggedIn, isStaff, dogs, setDogs, setIsEditMode }
   useEffect(() => {
     fetchFavorites();
   }, [credentials]);
-  
+
   const handleDelete = async (id) => {
     try {
       await axios.delete(`${dogAPI.url}/api/v1/dogs/${id}`, {
@@ -67,10 +67,9 @@ const Dogs = ({ credentials, isLoggedIn, isStaff, dogs, setDogs, setIsEditMode }
   if (!dogs || loading) {
     return (<div>Loading...</div>)
   } else {
-
     return (
       <>
-        <SearchBar setLoading={setLoading} setDogs={setDogs} isLoggedIn={isLoggedIn} />
+        <SearchBar setLoading={setLoading} setDogs={setDogs} isLoggedIn={isLoggedIn} isStaff={isStaff} />
         {(dogs.length === 0) ? (
           <div>No dogs found.</div>
         ) : (

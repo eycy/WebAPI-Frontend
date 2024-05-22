@@ -43,7 +43,11 @@ const LoginForm = ({ setCredentials, setIsLoggedIn, isLoggedIn, setIsStaff }) =>
         // Update the state and store the authentication tokens
         setIsLoggedIn(true);
         setUser(user);
-        setIsStaff(user.isStaff);
+        setIsStaff(user.isstaff);
+        console.log('login ok');
+        console.log(user);
+        console.log(`user.isStaff: ${user.isStaff}`)
+        console.log(`user.isstaff: ${user.isstaff}`)
         setCredentials(base64Credentials);
       } else {
         // Login failed
@@ -84,15 +88,16 @@ const LoginForm = ({ setCredentials, setIsLoggedIn, isLoggedIn, setIsStaff }) =>
           <Dropdown menu={{ items }}>
             <a onClick={(e) => e.preventDefault()}>
               <Space>
-                Hello, {getUser.username}
-                <DownOutlined />
+                <Button icon={<UserOutlined />}> {getUser.username}</Button>
+
               </Space>
             </a>
           </Dropdown>
         </div>
       ) : (
         <>
-          <Button icon={<UserOutlined />} onClick={() => { setIsShow(true) }} />
+          <Button icon={<UserOutlined />} onClick={() => { setIsShow(true) }} >Login
+          </Button>
           <Modal open={isShow} onCancel={() => { setIsShow(false) }} title="Welcome" footer={[]}>
             <Form onFinish={handleSubmit}>
               <Form.Item label="Username" name="username"
