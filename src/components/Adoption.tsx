@@ -18,7 +18,7 @@ const Adoption = ({ isLoggedIn, isStaff, credentials }) => {
                 const response = await fetch(`${dogAPI.url}${endpoint}`, {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Basic ${credentials}`
+                        'Authorization': `${credentials}`
                     }
                 });
                 const data = await response.json();
@@ -43,7 +43,7 @@ const Adoption = ({ isLoggedIn, isStaff, credentials }) => {
             const response = await fetch(`${dogAPI.url}/api/v1/users/replyAdoption`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Basic ${credentials}`,
+                    'Authorization': `${credentials}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -84,7 +84,7 @@ const Adoption = ({ isLoggedIn, isStaff, credentials }) => {
             const response = await fetch(`${dogAPI.url}/api/v1/users/deleteAdoption`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Basic ${credentials}`,
+                    'Authorization': `${credentials}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({

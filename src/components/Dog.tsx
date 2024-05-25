@@ -11,7 +11,7 @@ const { Meta } = Card
 const Dog = (props) => {
 
   const dog = props.dog;
-  
+
   const [modalVisible, setModalVisible] = useState(false);
   const [modalUploadVisible, setUploadModalVisible] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
@@ -39,7 +39,7 @@ const Dog = (props) => {
       const response = await fetch(`${dogAPI.url}/api/v1/dogs/${dog.id}/upload-photo`, {
         method: 'PUT',
         headers: {
-          'Authorization': `Basic ${props.credentials}`
+          'Authorization': `${props.credentials}`
         },
         body: formData,
       });
@@ -67,11 +67,11 @@ const Dog = (props) => {
       let msgSuccess = 'Added to favorites.';
       let msgFail = 'Failed to add to favorites';
       setIsFavorite(!isFavorite);
-      if (!props.favoriteDogIds.includes(dog.id))  {
+      if (!props.favoriteDogIds.includes(dog.id)) {
         response = await fetch(`${dogAPI.url}/api/v1/users/addFavorite`, {
           method: 'POST',
           headers: {
-            'Authorization': `Basic ${props.credentials}`,
+            'Authorization': `${props.credentials}`,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
@@ -82,7 +82,7 @@ const Dog = (props) => {
         response = await fetch(`${dogAPI.url}/api/v1/users/removeFavorite`, {
           method: 'POST',
           headers: {
-            'Authorization': `Basic ${props.credentials}`,
+            'Authorization': `${props.credentials}`,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({

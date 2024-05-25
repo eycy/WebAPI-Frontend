@@ -1,13 +1,7 @@
 
 
-//import './App.css'
-// import React from 'react'
 import { useState } from 'react';
-import { Layout, Divider, Typography, FloatButton, Space, Button } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
-
-import Dogs from './components/Dogs';
-import MainTitle from './components/MainTitle';
+import { Layout, Typography, FloatButton, Space } from 'antd';
 import DetailDogs from './components/DetailDogs';
 import Home from './components/Home';
 import Dashboard from './components/Dashboard';
@@ -23,20 +17,15 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import DogContext from './contexts/DogContext';
 
 const { Header, Footer, Content } = Layout;
-const { Text } = Typography;
 
 
 const App = () => {
-  // const [isShow, setIsShow] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isStaff, setIsStaff] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [dogs, setDogs] = useState(null);
   const [selectedDog, setSelectedDog] = useState(null);
-  // const [user, setUser] = useState(null);
-
   const [credentials, setCredentials] = useState("");
-
 
   return (
     <Router>
