@@ -65,7 +65,7 @@ const ListingForm = ({ credentials, isLoggedIn, isEditMode }) => {
       method: method,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Basic ${credentials}`
+        'Authorization': `${credentials}`
       },
       body: JSON.stringify({ ...values, authorID })
     });

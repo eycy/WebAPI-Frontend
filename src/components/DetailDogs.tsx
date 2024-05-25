@@ -32,7 +32,7 @@ const DetailDogs = ({ dogs, isLoggedIn, isStaff, credentials }) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Basic ${credentials}`
+        'Authorization': `${credentials}`
       },
     })
       .then(response => response.json())
@@ -57,7 +57,7 @@ const DetailDogs = ({ dogs, isLoggedIn, isStaff, credentials }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Basic ${credentials}`
+          'Authorization': `${credentials}`
         },
         body: JSON.stringify({
           dogid: adoptingDog.id,

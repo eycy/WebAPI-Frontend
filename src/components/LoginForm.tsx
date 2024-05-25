@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Modal, Checkbox, Space, Typography } from 'antd';
+import { Col, Row, Button, Form, Input, Modal, Spin, Space, Typography } from 'antd';
+import axios from 'axios';
 
 import { DownOutlined, SmileOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Dropdown } from 'antd';
 
 import { dogAPI } from "../commons/http-commons";
+import GoogleAuth from './GoogleAuth';
 
 interface loginFields {
   username?: string;
@@ -20,10 +22,12 @@ const LoginForm = ({ setCredentials, setIsLoggedIn, isLoggedIn, setIsStaff }) =>
   const [isShow, setIsShow] = React.useState(false);
   const [getUser, setUser] = useState(null);
   const [loginError, setLoginError] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
 
   const handleSubmit = async (values) => {
     try {
-
+      setIsLoading(true);
       const base64Credentials = btoa(`${values.username}:${values.password}`);
 
       // Perform the login request to the server
@@ -44,11 +48,7 @@ const LoginForm = ({ setCredentials, setIsLoggedIn, isLoggedIn, setIsStaff }) =>
         setIsLoggedIn(true);
         setUser(user);
         setIsStaff(user.isstaff);
-        console.log('login ok');
-        console.log(user);
-        console.log(`user.isStaff: ${user.isStaff}`)
-        console.log(`user.isstaff: ${user.isstaff}`)
-        setCredentials(base64Credentials);
+        setCredentials(`Basic ${base64Credentials}`);
       } else {
         // Login failed
         console.log('Login failed');
@@ -59,7 +59,22 @@ const LoginForm = ({ setCredentials, setIsLoggedIn, isLoggedIn, setIsStaff }) =>
     } finally {
       // Reset the form and loading state
       // form.resetFields();
-      // setLoading(false);
+      setIsLoading(false);
+    }
+  };
+
+  const logout = async () => {
+    setIsShow(false);
+    try {
+      setIsLoggedIn(false);
+      setUser(null);
+      setIsStaff(false);
+      setCredentials('');
+      if (getUser?.accesstoken) {
+        await axios.post(`${dogAPI.url}/api/v1/login/auth/google/logout`, { logout: true });
+      }
+    } catch (error) {
+      console.log('Logout error:', error);
     }
   };
 
@@ -68,27 +83,19 @@ const LoginForm = ({ setCredentials, setIsLoggedIn, isLoggedIn, setIsStaff }) =>
     {
       key: '1',
       label: (
-        <Link to="/listingForm">Add New Listing</Link>
-      ),
-    },
-    {
-      key: '2',
-      label: (
-        <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-          Logout
-        </a>
+        <a onClick={logout}>Logout</a>
       )
     }
   ];
 
   return (
     <>
-      {isLoggedIn ? (
+      {isLoading ? (<Spin spinning={isLoading} fullscreen />) : (isLoggedIn ? (
         <div>
           <Dropdown menu={{ items }}>
             <a onClick={(e) => e.preventDefault()}>
               <Space>
-                <Button icon={<UserOutlined />}> {getUser.username}</Button>
+                <Button icon={<UserOutlined />}> {getUser?.username}</Button>
 
               </Space>
             </a>
@@ -111,16 +118,28 @@ const LoginForm = ({ setCredentials, setIsLoggedIn, isLoggedIn, setIsStaff }) =>
               {loginError && (
                 <Text type="danger">Incorrect username or password</Text>
               )}
-              <div>
-                <Space>
-                  <Button type="primary" htmlType="submit">Login</Button>
-                  Or <a href="/createuser">Register now!</a>
-                </Space>
-              </div>
+              <Row justify="space-between" align="middle">
+                <Col>
+                  <Space>
+                    <Button type="primary" htmlType="submit">Login</Button>
+                    Or <a href="/createuser">Register now!</a>
+                  </Space>
+                </Col>
+                <Col>
+                  <GoogleAuth
+                    setCredentials={setCredentials}
+                    setIsLoggedIn={setIsLoggedIn}
+                    isLoggedIn={isLoggedIn}
+                    setIsStaff={setIsStaff}
+                    setUser={setUser}
+                    setIsShow={setIsShow}
+                    setIsLoading={setIsLoading} />
+                </Col>
+              </Row>
             </Form>
           </Modal>
         </>
-      )}
+      ))}
     </>
   )
 }

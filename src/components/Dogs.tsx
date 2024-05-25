@@ -16,7 +16,7 @@ const Dogs = ({ credentials, isLoggedIn, isStaff, dogs, setDogs, setIsEditMode }
     try {
       const response = await axios.get(`${dogAPI.url}/api/v1/users/favorites`, {
         headers: {
-          'Authorization': `Basic ${credentials}`
+          'Authorization': `${credentials}`
         }
       });
 
@@ -39,7 +39,7 @@ const Dogs = ({ credentials, isLoggedIn, isStaff, dogs, setDogs, setIsEditMode }
     try {
       await axios.delete(`${dogAPI.url}/api/v1/dogs/${id}`, {
         headers: {
-          'Authorization': `Basic ${credentials}`
+          'Authorization': `${credentials}`
         }
       });
       // Remove the deleted dog from the dogs array
@@ -55,10 +55,9 @@ const Dogs = ({ credentials, isLoggedIn, isStaff, dogs, setDogs, setIsEditMode }
   React.useEffect(() => {
     axios.get(`${dogAPI.url}/api/v1/dogs`, {
       headers: {
-        'Authorization': `Basic ${credentials}`
+        'Authorization': `${credentials}`
       }
     })
-
       .then((res) => {
         setDogs(res.data)
       })
