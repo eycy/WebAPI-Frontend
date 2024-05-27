@@ -14,6 +14,7 @@ const DetailDogs = ({ dogs, isLoggedIn, isStaff, credentials }) => {
   const [adoptionMessage, setAdoptionMessage] = useState('');
   const [adoptingDog, setAdoptingDog] = useState(null);
   const [userAdoptions, setUserAdoptions] = useState([]);
+  const [breedName, setBreedName] = useState('');
 
   useEffect(() => {
     // Fetch the dog based on the provided ID
@@ -24,6 +25,21 @@ const DetailDogs = ({ dogs, isLoggedIn, isStaff, credentials }) => {
 
     // Fetch the user's adoptions
     getUserAdoption();
+
+
+
+    // Fetch the breed information
+    async function fetchBreedInfo() {
+      try {
+        const response = await fetch(`${dogAPI.url}/api/v1/dogs/breeds`);
+        const data = await response.json();
+        const breedName = data.find(breed => breed.id === adoptingDog?.breed_id)?.name || '';
+        setBreedName(breedName);
+      } catch (error) {
+        console.error('Error fetching breed information:', error);
+      }
+    }
+    fetchBreedInfo();
   }, [aid, credentials]);
 
   const getUserAdoption = async () => {
@@ -106,7 +122,7 @@ const DetailDogs = ({ dogs, isLoggedIn, isStaff, credentials }) => {
         {
           key: '2',
           label: 'Breed',
-          children: breed_id,
+          children: breedName,
         },
         {
           key: '3',

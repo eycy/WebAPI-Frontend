@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   Cascader,
@@ -12,6 +12,7 @@ import {
   Space,
   Switch,
   TreeSelect,
+  Image,
 } from 'antd';
 
 import { Typography } from 'antd';
@@ -32,6 +33,9 @@ const ListingForm = ({ credentials, isLoggedIn, isEditMode }) => {
   const [form] = Form.useForm(); // Create the form instance
   const { TextArea } = Input;
   const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default');
+  // const [breeds, setBreeds] = useState([]);
+  const [breeds, setBreeds] = useState<{ id: number; name: string }[]>([]);
+  const [breedImage, setBreedImage] = useState('');
   const { selectedDog } = useContext(DogContext);
 
   const initialValues = {
@@ -44,16 +48,59 @@ const ListingForm = ({ credentials, isLoggedIn, isEditMode }) => {
     size: componentSize
   };
 
+  useEffect(() => {
+    const fetchBreeds = async () => {
+      try {
+        const response = await fetch(`${dogAPI.url}/api/v1/dogs/breeds`);
+        const data = await response.json();
+        setBreeds(data);
+      } catch (error) {
+        console.error('Error fetching breeds:', error);
+      }
+    };
+    fetchBreeds();
+  }, []);
+
+
+  const handleBreedChange = (value) => {
+    console.log('handleBreedChange');
+    form.setFieldValue('breed_id', value);
+    fetchBreedImage(value);
+  };
+
+  const fetchBreedImage = async (breedId) => {
+    console.log('fetchBreedImage');
+    try {
+      const selectedBreed = breeds.find((breed) => breed.id === breedId);
+      if (selectedBreed) {
+
+        let breedParts = selectedBreed.name.split(' ');
+        let breedUrl = '';
+
+        if (breedParts.length === 1) {
+          breedUrl = `https://dog.ceo/api/breed/${selectedBreed.name.toLowerCase()}/images/random`;
+        } else {
+          breedUrl = `https://dog.ceo/api/breed/${breedParts[1].toLowerCase()}/${breedParts[0].toLowerCase()}/images/random`;
+        }
+        const response = await fetch(breedUrl);
+        const data = await response.json();
+        if (data.status === 'success') {
+          setBreedImage(data.message);
+        } else {
+          console.error('Error fetching breed image:', data.message);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching breed image:', error);
+    }
+  };
+
   const onFormLayoutChange = ({ size }: { size: SizeType }) => {
     setComponentSize(size);
   };
 
   const handleSubmit = async (values) => {
     console.log('Received values of form: ', values);
-
-    // Convert authorID to integer
-    const authorID = parseInt(values.authorID, 10);
-
     let method = 'POST'
     let url = `${dogAPI.url}/api/v1/dogs`
     if (isEditMode) {
@@ -67,7 +114,7 @@ const ListingForm = ({ credentials, isLoggedIn, isEditMode }) => {
         'Content-Type': 'application/json',
         'Authorization': `${credentials}`
       },
-      body: JSON.stringify({ ...values, authorID })
+      body: JSON.stringify({ ...values })
     });
 
 
@@ -104,9 +151,9 @@ const ListingForm = ({ credentials, isLoggedIn, isEditMode }) => {
           <div style={{ width: '50%' }}>
             {isEditMode ? (<Title>Edit Listing</Title>) : (<Title>Create New Listing</Title>)}
             <Form
-              labelCol={{ span: 4 }}
+              labelCol={{ span: 6 }}
               labelAlign="right"
-              wrapperCol={{ span: 14 }}
+              wrapperCol={{ span: 18 }}
               layout="horizontal"
               initialValues={initialValues}
               onValuesChange={onFormLayoutChange}
@@ -119,15 +166,30 @@ const ListingForm = ({ credentials, isLoggedIn, isEditMode }) => {
                 <Input />
               </Form.Item>
               <Form.Item label="Breed" name="breed_id" style={{ textAlign: 'left' }}>
-                <Select>
-                  <Select.Option value={1}>Akita</Select.Option>
-                  <Select.Option value={2}>Bouvier</Select.Option>
-                  <Select.Option value={3}>Dachshund</Select.Option>
-                  <Select.Option value={4}>German Shepherd</Select.Option>
-                  <Select.Option value={5}>Otterhound</Select.Option>
-                  <Select.Option value={6}>Terrier</Select.Option>
+                <Select onChange={handleBreedChange}>
+                  {breeds.map((breed) => (
+                    <Select.Option key={breed.id} value={breed.id}>
+                      {breed.name}
+                    </Select.Option>
+                  ))}
                 </Select>
               </Form.Item>
+              {breedImage && (
+                <div>
+                  <Space>
+                    Sample of this breed:
+                    <Image
+                      src={breedImage}
+                      alt={form.getFieldValue('breed_id')}
+                      width={150}
+                      height={150}
+                      style={{
+                        objectFit: 'contain',
+                      }}
+                    />
+                  </Space>
+                </div>
+              )}
               <Form.Item label="Location" name="location" >
                 <Select >
                   <Select.Option value="Aberdeen">Aberdeen</Select.Option>
@@ -140,9 +202,6 @@ const ListingForm = ({ credentials, isLoggedIn, isEditMode }) => {
               </Form.Item>
               <Form.Item label="Description" name="description">
                 <TextArea rows={4} />
-              </Form.Item>
-              <Form.Item label="Author ID" name="authorID">
-                <Input />
               </Form.Item>
               <div style={{ marginLeft: '20px' }}>
                 <Space>
