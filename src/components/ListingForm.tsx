@@ -37,27 +37,39 @@ const ListingForm = ({ credentials, isLoggedIn, isEditMode }) => {
   const [breeds, setBreeds] = useState<{ id: number; name: string }[]>([]);
   const [breedImage, setBreedImage] = useState('');
   const { selectedDog } = useContext(DogContext);
-
-  const initialValues = {
+  const [initialValues, setInitialValues] = useState({
     name: selectedDog?.name || '',
+    breed: '', // Initialize with empty string
     breed_id: selectedDog?.breed_id || '',
     location: selectedDog?.location || '',
     dob: selectedDog?.dob ? moment(selectedDog.dob) : null,
     description: selectedDog?.description || '',
     authorID: selectedDog?.authorid || '',
     size: componentSize
+  });
+
+  const fetchBreeds = async () => {
+    console.log('fetchBreeds');
+    try {
+      const response = await fetch(`${dogAPI.url}/api/v1/dogs/breeds`);
+      const data = await response.json();
+      setBreeds(data);
+
+      // Find the selected breed name
+      const selectedBreed = data.find((breed) => breed.id === selectedDog?.breed_id);
+      console.log(selectedBreed);
+      const selectedBreedName = selectedBreed?.name || '';
+      console.log(selectedBreedName);
+
+      // Update the initialValues object with the breed name
+      form.setFieldValue('breed_id', selectedBreed.id);
+    } catch (error) {
+      console.error('Error fetching breeds:', error);
+    }
   };
 
   useEffect(() => {
-    const fetchBreeds = async () => {
-      try {
-        const response = await fetch(`${dogAPI.url}/api/v1/dogs/breeds`);
-        const data = await response.json();
-        setBreeds(data);
-      } catch (error) {
-        console.error('Error fetching breeds:', error);
-      }
-    };
+    console.log('useEffect []');
     fetchBreeds();
   }, []);
 
@@ -190,7 +202,7 @@ const ListingForm = ({ credentials, isLoggedIn, isEditMode }) => {
                   </Space>
                 </div>
               )}
-              <Form.Item label="Location" name="location" >
+              <Form.Item label="Location" name="location" style={{ textAlign: 'left' }} >
                 <Select >
                   <Select.Option value="Aberdeen">Aberdeen</Select.Option>
                   <Select.Option value="Jordan">Jordan</Select.Option>

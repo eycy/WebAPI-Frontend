@@ -12,11 +12,11 @@ const LoginForm = () => {
 
   const handleSubmit = async (values) => {
     try {
-      const { firstname, lastname, username, password, email } = values;
+      const { firstname, lastname, username, password, email, signupcode } = values;
 
       // Prepare the user data
       const userData = {
-        firstname, lastname, username, password, email
+        firstname, lastname, username, password, email, signupcode
       };
 
       // Perform the user creation request to the server
@@ -33,7 +33,10 @@ const LoginForm = () => {
         const data = await response.json();
         console.log('User created:', data);
         message.success('User creation successful. Please login.');
-        navigate(-1)
+        // Wait 3 seconds before navigating back
+        setTimeout(() => {
+          navigate(-1);
+        }, 3000);
       } else {
         // User creation failed
         console.log('User creation failed');
@@ -58,46 +61,46 @@ const LoginForm = () => {
     },
   };
 
-  
+
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <div style={{ width: '50%' }}>
-      <Title>Create User</Title>
-      
-      <Form {...formItemLayout} style={{ padding: '15px', maxWidth: 600 }} onFinish={handleSubmit}>
-        <Form.Item label="First Name" name="firstname"
-          rules={[{ required: true, message: 'Missing first name' }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item label="Last Name" name="lastname"
-          rules={[{ required: true, message: 'Missing last name' }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item label="Username" name="username"
-          rules={[{ required: true, message: 'Missing username' }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item label="Password" name="password"
-          rules={[{ required: true, message: 'Missing password' }]}>
-          <Input.Password />
-        </Form.Item>
-        <Form.Item label="Email" name="email"
-          rules={[{ required: true, message: 'Missing email' }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item label="Sign Up Code" name="signupcode">
-          <Input />
-        </Form.Item>
-        <div>
-          <Space>
-            <Button type="primary" htmlType="submit">Create</Button>
-            <Button htmlType="button" onClick={() => navigate(-1)}>Cancel</Button>
-          </Space>
+          <Title>Create User</Title>
+
+          <Form {...formItemLayout} style={{ padding: '15px', maxWidth: 600 }} onFinish={handleSubmit}>
+            <Form.Item label="First Name" name="firstname"
+              rules={[{ required: true, message: 'Missing first name' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Last Name" name="lastname"
+              rules={[{ required: true, message: 'Missing last name' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Username" name="username"
+              rules={[{ required: true, message: 'Missing username' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Password" name="password"
+              rules={[{ required: true, message: 'Missing password' }]}>
+              <Input.Password />
+            </Form.Item>
+            <Form.Item label="Email" name="email"
+              rules={[{ required: true, message: 'Missing email' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Sign Up Code" name="signupcode">
+              <Input />
+            </Form.Item>
+            <div>
+              <Space>
+                <Button type="primary" htmlType="submit">Create</Button>
+                <Button htmlType="button" onClick={() => navigate(-1)}>Cancel</Button>
+              </Space>
+            </div>
+          </Form>
         </div>
-      </Form>
-          </div>
-        </div>
+      </div>
     </>
   )
 }

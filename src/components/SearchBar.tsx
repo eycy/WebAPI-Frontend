@@ -34,7 +34,7 @@ const SearchBar = ({ setLoading, setDogs, isLoggedIn, isStaff }) => {
       setLoading(false);
     }
   };
-  
+
   const onAdvSearch = async (values, form) => {
     try {
       setLoading(true); // show loading
@@ -43,7 +43,7 @@ const SearchBar = ({ setLoading, setDogs, isLoggedIn, isStaff }) => {
 
       Object.entries(values).forEach(([key, value]) => {
         if (value !== undefined && value !== '') {
-            queryParams.append(key, value);
+          queryParams.append(key, value);
         }
       });
 
@@ -75,7 +75,7 @@ const SearchBar = ({ setLoading, setDogs, isLoggedIn, isStaff }) => {
     }
   };
 
-  
+
   return (
     <>
       <Row justify="end" gutter={[16, 16]} style={{ padding: '10px' }}>
@@ -83,12 +83,12 @@ const SearchBar = ({ setLoading, setDogs, isLoggedIn, isStaff }) => {
           <span style={{ marginRight: '8px' }}>Search:</span>
           <Search placeholder="Input Dog's Name" allowClear onSearch={onNameSearch} style={{ width: 200 }} />
         </Col>
-        <Col span={3} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
+        <Col span={3} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
           <Button type="text" onClick={handleAdvanceSearchToggle} style={{ marginLeft: '8px' }}>
             {isAdvanceSearchOpen ? 'Advance Search \u25B2' : 'Advanced Search \u25BC'}
           </Button>
         </Col>
-          
+
         {isLoggedIn && isStaff ? (
           <Col span={3} style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button type="primary" onClick={() => { navigate('/listingForm'); }}>
@@ -100,7 +100,7 @@ const SearchBar = ({ setLoading, setDogs, isLoggedIn, isStaff }) => {
 
 
       {isAdvanceSearchOpen && (
-        <AdvanceSearchPanel onAdvSearch={onAdvSearch} isAdvanceSearchOpen={isAdvanceSearchOpen}/>
+        <AdvanceSearchPanel onAdvSearch={onAdvSearch} isAdvanceSearchOpen={isAdvanceSearchOpen} />
       )}
     </>
   );

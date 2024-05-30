@@ -111,8 +111,19 @@ const Dog = (props) => {
   return (
     <>
       <Card
-        style={{ width: 300, height: 'fit-content' }}
-        cover={<img alt="Dog Photo" src={`${dogAPI.url}/api/v1/dogs/photos?name=${dog.new_filename}`} />}
+        hoverable
+        style={{ width: 250, height: 'fit-content' }}
+        cover={
+          <Link to={`/a/${props.href}`}>
+            <img
+              alt="Dog Photo"
+              src={`${dogAPI.url}/api/v1/dogs/photos?name=${dog.new_filename}`}
+              style={{
+                width: '100%',
+              }}
+            />
+          </Link>
+        }
         actions={
           props.isLoggedIn && props.isStaff ? ( // Condition 1: Staff
             [
@@ -132,13 +143,14 @@ const Dog = (props) => {
               <HeartOutlined key="notFav" onClick={toggleFavorite} />
             ]
           ) : ( // Condition 3: not logged in
-            [
-              <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>
-            ]
+            <></>
+            // [
+            //   <Link to={`/a/${props.href}`}><InfoCircleOutlined key="detail" /></Link>
+            // ]
           )
         }
       >
-        <Meta name={props.name} description={props.name} />
+        <Meta name={props.name} title={props.name} description={props.dog.description} />
       </Card>
 
       <Modal

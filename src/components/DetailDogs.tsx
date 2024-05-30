@@ -14,36 +14,50 @@ const DetailDogs = ({ dogs, isLoggedIn, isStaff, credentials }) => {
   const [adoptionMessage, setAdoptionMessage] = useState('');
   const [adoptingDog, setAdoptingDog] = useState(null);
   const [userAdoptions, setUserAdoptions] = useState([]);
-  const [breedName, setBreedName] = useState('');
+  // const [breedName, setBreedName] = useState('');
 
   useEffect(() => {
     // Fetch the dog based on the provided ID
     fetch(`${dogAPI.url}/api/v1/dogs/${aid}`)
       .then(response => response.json())
-      .then(data => setAdoptingDog(data))
+      .then(data => {
+        setAdoptingDog(data);
+      })
       .catch(error => console.error(error));
 
     // Fetch the user's adoptions
     getUserAdoption();
-
-
-
-    // Fetch the breed information
-    async function fetchBreedInfo() {
-      try {
-        const response = await fetch(`${dogAPI.url}/api/v1/dogs/breeds`);
-        const data = await response.json();
-        const breedName = data.find(breed => breed.id === adoptingDog?.breed_id)?.name || '';
-        setBreedName(breedName);
-      } catch (error) {
-        console.error('Error fetching breed information:', error);
-      }
-    }
-    fetchBreedInfo();
   }, [aid, credentials]);
+
+  // useEffect(() => {
+  //   if (adoptingDog) {
+  //     fetchBreedInfo();
+  //   }
+  // }, [adoptingDog]);
+
+  // Fetch the breed information
+  // const fetchBreedInfo = async () => {
+  //   try {
+  //     console.log('fetch breed info');
+  //     const response = await fetch(`${dogAPI.url}/api/v1/dogs/breeds`, {
+  //       method: 'GET'
+  //     });
+  //     console.log('1');
+  //     const data = await response.json();
+  //     console.log('2');
+  //     console.log(adoptingDog);
+  //     const bName = data.find(breed => breed.id === adoptingDog?.breed_id)?.name || '';
+  //     console.log(bName);
+  //     setBreedName(bName);
+  //     console.log('3');
+  //   } catch (error) {
+  //     console.error('Error fetching breed information:', error);
+  //   }
+  // }
 
   const getUserAdoption = async () => {
     // Fetch the user's adoptions
+    console.log('get adoption');
     fetch(`${dogAPI.url}/api/v1/users/getAdoptions`, {
       method: 'GET',
       headers: {
@@ -111,7 +125,8 @@ const DetailDogs = ({ dogs, isLoggedIn, isStaff, credentials }) => {
 
   for (const dog of dogs) {
     if (dog.id == +aid) {
-      const { name, breed_id, location, description, dob } = dog;
+      console.log(dog);
+      const { name, breedname, location, description, dob } = dog;
 
       const items: DescriptionsProps['items'] = [
         {
@@ -122,7 +137,7 @@ const DetailDogs = ({ dogs, isLoggedIn, isStaff, credentials }) => {
         {
           key: '2',
           label: 'Breed',
-          children: breedName,
+          children: breedname,
         },
         {
           key: '3',
@@ -150,7 +165,11 @@ const DetailDogs = ({ dogs, isLoggedIn, isStaff, credentials }) => {
                 <Descriptions title="Dog Details" layout="vertical" bordered items={items} />
               </Col>
               <Col span={12}>
-                <img alt="Dog Photo" src={`${dogAPI.url}/api/v1/dogs/photos?name=${dog.new_filename}`} />
+                <img
+                  alt="Dog Photo"
+                  src={`${dogAPI.url}/api/v1/dogs/photos?name=${dog.new_filename}`}
+                  style={{ width: 250, height: 'fit-content' }}
+                />
               </Col>
             </Row>
           </div>
