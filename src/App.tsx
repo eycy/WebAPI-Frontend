@@ -13,6 +13,7 @@ import UserCreationForm from './components/UserCreationForm';
 import Adoption from './components/Adoption';
 import Error from './components/Error';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import './App.css'
 
 import DogContext from './contexts/DogContext';
 
@@ -45,8 +46,7 @@ const App = () => {
           <div>
             <Space>
               <Link to="/">Home</Link>
-              <Link to="/dashboard">Dashboard</Link>
-              <Link to="/adoption">Adoption</Link>
+              <Link to="/adoption">Adoptions</Link>
               <Link to="/about">About</Link>
             </Space>
           </div>
