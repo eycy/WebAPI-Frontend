@@ -8,7 +8,7 @@ import AdvanceSearchPanel from './AdvanceSearchPanel';
 
 const { Search } = Input;
 
-const SearchBar = ({ setLoading, setDogs, isLoggedIn, isStaff }) => {
+const SearchBar = ({ setLoading, setDogs, isLoggedIn, isStaff, setIsEditMode }) => {
   const navigate = useNavigate();
   const [isAdvanceSearchOpen, setIsAdvanceSearchOpen] = useState(false);
 
@@ -91,7 +91,7 @@ const SearchBar = ({ setLoading, setDogs, isLoggedIn, isStaff }) => {
 
         {isLoggedIn && isStaff ? (
           <Col span={3} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button type="primary" onClick={() => { navigate('/listingForm'); }}>
+            <Button type="primary" onClick={() => { navigate('/listingForm'); setIsEditMode(false); }}>
               Add New Listing
             </Button>
           </Col>

@@ -36,7 +36,7 @@ const ListingForm = ({ credentials, isLoggedIn, isEditMode }) => {
   // const [breeds, setBreeds] = useState([]);
   const [breeds, setBreeds] = useState<{ id: number; name: string }[]>([]);
   const [breedImage, setBreedImage] = useState('');
-  const { selectedDog } = useContext(DogContext);
+  const { selectedDog, setSelectedDog } = useContext(DogContext);
   const [initialValues, setInitialValues] = useState({
     name: selectedDog?.name || '',
     breed: '', // Initialize with empty string
@@ -47,6 +47,11 @@ const ListingForm = ({ credentials, isLoggedIn, isEditMode }) => {
     authorID: selectedDog?.authorid || '',
     size: componentSize
   });
+
+  const handleCancel = () => {
+    navigate(-1);
+    setSelectedDog(null); // Reset the selectedDog in the context
+  };
 
   const fetchBreeds = async () => {
     console.log('fetchBreeds');
@@ -137,6 +142,7 @@ const ListingForm = ({ credentials, isLoggedIn, isEditMode }) => {
       } else {
         message.success('Listing is added successfully.');
         form.resetFields();
+        setBreedImage('');
       }
     } else {
       if (isEditMode) {
@@ -221,7 +227,7 @@ const ListingForm = ({ credentials, isLoggedIn, isEditMode }) => {
                   <Button htmlType="button" onClick={onReset}>
                     Reset
                   </Button>
-                  <Button htmlType="button" onClick={() => navigate(-1)}>Cancel</Button>
+                  <Button htmlType="button" onClick={handleCancel}>Cancel</Button>
                 </Space>
               </div>
             </Form>

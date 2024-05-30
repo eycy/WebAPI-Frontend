@@ -68,7 +68,7 @@ const Dogs = ({ credentials, isLoggedIn, isStaff, dogs, setDogs, setIsEditMode }
   } else {
     return (
       <>
-        <SearchBar setLoading={setLoading} setDogs={setDogs} isLoggedIn={isLoggedIn} isStaff={isStaff} />
+        <SearchBar setLoading={setLoading} setDogs={setDogs} isLoggedIn={isLoggedIn} isStaff={isStaff} setIsEditMode={setIsEditMode} />
         {(dogs.length === 0) ? (
           <div>No dogs found.</div>
         ) : (
