@@ -75,7 +75,7 @@ const Dogs = ({ credentials, isLoggedIn, isStaff, dogs, setDogs, setIsEditMode }
           <Row justify="center" gutter={[16, 16]}>
             <Col span={24}>
               <Flex justify="space-evenly" wrap="wrap" gap="middle">
-                {dogs.map((dog) => (
+                {dogs.sort((a, b) => b.id - a.id).map((dog) => (
                   <Dog
                     dog={dog}
                     name={dog.name}
